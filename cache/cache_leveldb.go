@@ -8,14 +8,19 @@ import (
 )
 
 var (
-	ErrParameterMissing = errors.New("Parameter is missing")
+	ErrParameterMissing    = errors.New("Parameter is missing")
+	DefaultLevelDbFileName = "leveldb"
 )
 
 type CacheLevelDB struct {
+	LevelDbFileName string
 }
 
-func GetLevelDB() (*leveldb.DB, error) {
-	return leveldb.OpenFile("leveldb", nil)
+func GetLevelDB(dbFileName string) (*leveldb.DB, error) {
+	if dbFileName == "" {
+		dbFileName = DefaultLevelDbFileName
+	}
+	return leveldb.OpenFile(dbFileName, nil)
 }
 
 func (cache CacheLevelDB) SetValue(key, value []byte) error {
