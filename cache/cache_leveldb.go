@@ -2,8 +2,8 @@ package cache
 
 import (
 	"errors"
-	"ytserver/logs"
 
+	"github.com/swanwish/go-helper/logs"
 	"github.com/syndtr/goleveldb/leveldb"
 )
 
