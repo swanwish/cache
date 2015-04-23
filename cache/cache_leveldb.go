@@ -47,5 +47,9 @@ func (cache CacheLevelDB) GetValue(key []byte) ([]byte, error) {
 	}
 	defer db.Close()
 
-	return db.Get(key, nil)
+	value, err := db.Get(key, nil)
+	if err == leveldb.ErrNotFound {
+		err = ErrKeyNotFound
+	}
+	return value, err
 }

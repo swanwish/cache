@@ -1,10 +1,5 @@
 package logs
 
-import (
-	"fmt"
-	"log"
-)
-
 const (
 	LOG_DEBUG = "debug"
 	LOG_INFO  = "info"
@@ -12,40 +7,52 @@ const (
 	LOG_FATAL = "fatal"
 )
 
+var Writer LogWriter = DefaultLogWriter{}
+
 func Debug(v ...interface{}) {
-	Log(LOG_DEBUG, v...)
+	if Writer != nil {
+		Writer.Debug(v)
+	}
 }
 
 func Info(v ...interface{}) {
-	Log(LOG_INFO, v...)
+	if Writer != nil {
+		Writer.Info(v)
+	}
 }
 
 func Error(v ...interface{}) {
-	Log(LOG_ERROR, v...)
+	if Writer != nil {
+		Writer.Error(v)
+	}
 }
 
 func Fatal(v ...interface{}) {
-	Log(LOG_FATAL, v...)
+	if Writer != nil {
+		Writer.Fatal(v)
+	}
 }
 
 func Debugf(formatString string, v ...interface{}) {
-	Logf(LOG_DEBUG, formatString, v...)
+	if Writer != nil {
+		Writer.Debugf(formatString, v...)
+	}
 }
 
 func Infof(formatString string, v ...interface{}) {
-	Logf(LOG_INFO, formatString, v...)
+	if Writer != nil {
+		Writer.Infof(formatString, v...)
+	}
 }
 
 func Errorf(formatString string, v ...interface{}) {
-	Logf(LOG_ERROR, formatString, v...)
+	if Writer != nil {
+		Writer.Errorf(formatString, v...)
+	}
 }
 
-func Log(logLevel string, v ...interface{}) {
-	logMessage := fmt.Sprint(v...)
-	log.Println(logLevel, " - ", logMessage)
-}
-
-func Logf(logLevel, formatString string, v ...interface{}) {
-	logMessage := fmt.Sprintf(formatString, v...)
-	log.Println(logLevel, "-", logMessage)
+func Fatalf(formatString string, v ...interface{}) {
+	if Writer != nil {
+		Writer.Fatalf(formatString, v...)
+	}
 }
