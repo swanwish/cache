@@ -1,5 +1,7 @@
 package logs
 
+import "fmt"
+
 const (
 	LOG_DEBUG = "debug"
 	LOG_INFO  = "info"
@@ -11,25 +13,25 @@ var Writer LogWriter = DefaultLogWriter{}
 
 func Debug(v ...interface{}) {
 	if Writer != nil {
-		Writer.Debug(v)
+		Writer.Debug(v...)
 	}
 }
 
 func Info(v ...interface{}) {
 	if Writer != nil {
-		Writer.Info(v)
+		Writer.Info(v...)
 	}
 }
 
 func Error(v ...interface{}) {
 	if Writer != nil {
-		Writer.Error(v)
+		Writer.Error(v...)
 	}
 }
 
 func Fatal(v ...interface{}) {
 	if Writer != nil {
-		Writer.Fatal(v)
+		Writer.Fatal(v...)
 	}
 }
 
@@ -55,4 +57,12 @@ func Fatalf(formatString string, v ...interface{}) {
 	if Writer != nil {
 		Writer.Fatalf(formatString, v...)
 	}
+}
+
+func LogMessage(v ...interface{}) string {
+	return fmt.Sprint(v...)
+}
+
+func LogMessagef(formatString string, v ...interface{}) string {
+	return fmt.Sprintf(formatString, v...)
 }

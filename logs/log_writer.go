@@ -1,11 +1,14 @@
 package logs
 
-import (
-	"fmt"
-	"log"
+import "log"
+
+const (
+	EMPTY_KEY = ""
 )
 
 type LogWriter interface {
+	Log(level, key string, v ...interface{})
+	Logf(level, key, format string, v ...interface{})
 	Debug(v ...interface{})
 	Info(v ...interface{})
 	Error(v ...interface{})
@@ -19,44 +22,60 @@ type LogWriter interface {
 type DefaultLogWriter struct {
 }
 
+func (w DefaultLogWriter) Log(level, key string, v ...interface{}) {
+	Log(level, key, v...)
+}
+
+func (w DefaultLogWriter) Logf(level, key, format string, v ...interface{}) {
+	Logf(level, key, format, v...)
+}
+
 func (w DefaultLogWriter) Debug(v ...interface{}) {
-	Log(LOG_DEBUG, v...)
+	Log(LOG_DEBUG, EMPTY_KEY, v...)
 }
 
 func (w DefaultLogWriter) Info(v ...interface{}) {
-	Log(LOG_INFO, v...)
+	Log(LOG_INFO, EMPTY_KEY, v...)
 }
 
 func (w DefaultLogWriter) Error(v ...interface{}) {
-	Log(LOG_ERROR, v...)
+	Log(LOG_ERROR, EMPTY_KEY, v...)
 }
 
 func (w DefaultLogWriter) Fatal(v ...interface{}) {
-	Log(LOG_FATAL, v...)
+	Log(LOG_FATAL, EMPTY_KEY, v...)
 }
 
 func (w DefaultLogWriter) Debugf(formatString string, v ...interface{}) {
-	Logf(LOG_DEBUG, formatString, v...)
+	Logf(LOG_DEBUG, EMPTY_KEY, formatString, v...)
 }
 
 func (w DefaultLogWriter) Infof(formatString string, v ...interface{}) {
-	Logf(LOG_INFO, formatString, v...)
+	Logf(LOG_INFO, EMPTY_KEY, formatString, v...)
 }
 
 func (w DefaultLogWriter) Errorf(formatString string, v ...interface{}) {
-	Logf(LOG_ERROR, formatString, v...)
+	Logf(LOG_ERROR, EMPTY_KEY, formatString, v...)
 }
 
 func (w DefaultLogWriter) Fatalf(formatString string, v ...interface{}) {
-	Logf(LOG_FATAL, formatString, v...)
+	Logf(LOG_FATAL, EMPTY_KEY, formatString, v...)
 }
 
-func Log(logLevel string, v ...interface{}) {
-	logMessage := fmt.Sprint(v...)
-	log.Println(logLevel, " - ", logMessage)
+func Log(logLevel, key string, v ...interface{}) {
+	logMessage := LogMessage(v...)
+	if key == EMPTY_KEY {
+		log.Println(logLevel, "-", logMessage)
+	} else {
+		log.Println(logLevel, "-", key, "-", logMessage)
+	}
 }
 
-func Logf(logLevel, formatString string, v ...interface{}) {
-	logMessage := fmt.Sprintf(formatString, v...)
-	log.Println(logLevel, "-", logMessage)
+func Logf(logLevel, key, formatString string, v ...interface{}) {
+	logMessage := LogMessagef(formatString, v...)
+	if key == EMPTY_KEY {
+		log.Println(logLevel, "-", logMessage)
+	} else {
+		log.Println(logLevel, " - ", key, " - ", logMessage)
+	}
 }
