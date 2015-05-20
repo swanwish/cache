@@ -40,11 +40,11 @@ func (c *IniConfiguration) Load(filePath string) error {
 			continue
 		}
 		pair := strings.Split(line, "=")
-		if len(pair) != 2 {
+		if len(pair) < 2 {
 			logs.Debugf("Skip line %s.", line)
 			continue
 		} else {
-			c.configurationKVM[pair[0]] = pair[1]
+			c.configurationKVM[pair[0]] = line[len(pair[0])+1:]
 		}
 	}
 	return nil

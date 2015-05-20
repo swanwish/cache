@@ -3,6 +3,8 @@ package cache
 import (
 	"errors"
 
+	"sync"
+
 	"github.com/swanwish/go-helper/logs"
 	"github.com/syndtr/goleveldb/leveldb"
 )
@@ -10,6 +12,7 @@ import (
 var (
 	ErrParameterMissing    = errors.New("Parameter is missing")
 	DefaultLevelDbFileName = "leveldb"
+	mutex                  = &sync.Mutex{}
 )
 
 type CacheLevelDB struct {
@@ -29,6 +32,8 @@ func (cache CacheLevelDB) SetValue(key, value []byte) error {
 		logs.Error("The key is empty.")
 		return ErrParameterMissing
 	}
+	mutex.Lock()
+	defer mutex.Unlock()
 	db, err := cache.GetLevelDB()
 	if err != nil {
 		logs.Errorf("Faieled to get level db connection, the error is %v\n", err)
@@ -40,6 +45,8 @@ func (cache CacheLevelDB) SetValue(key, value []byte) error {
 }
 
 func (cache CacheLevelDB) GetValue(key []byte) ([]byte, error) {
+	mutex.Lock()
+	defer mutex.Unlock()
 	db, err := cache.GetLevelDB()
 	if err != nil {
 		logs.Errorf("Failed to get level db connection, the error is %v\n", err)
@@ -52,4 +59,17 @@ func (cache CacheLevelDB) GetValue(key []byte) ([]byte, error) {
 		err = ErrKeyNotFound
 	}
 	return value, err
+}
+
+func (c CacheLevelDB) Delete(key []byte) error {
+	mutex.Lock()
+	defer mutex.Unlock()
+	db, err := c.GetLevelDB()
+	if err != nil {
+		logs.Errorf("Failed to get db connection, the error is %v\n", err)
+		return err
+	}
+	defer db.Close()
+
+	return db.Delete(key, nil)
 }
