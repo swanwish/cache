@@ -19,5 +19,5 @@ func logRequest(r *http.Request) {
 	// get client ip address
 	ip, _, _ := net.SplitHostPort(r.RemoteAddr)
 
-	logs.Debugf("Access url %v from ip: %s", r.URL, ip)
+	logs.Debugf("%s %v from ip: %s", r.Method, r.URL, ip)
 }

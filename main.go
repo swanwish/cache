@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/liwp-stephen/null/zero"
 	_ "github.com/swanwish/go-helper/db"
 	_ "github.com/swanwish/go-helper/utils"
+	_ "github.com/swanwish/go-helper/web"
 )
 
 func main() {
@@ -31,12 +31,44 @@ func main() {
 	//	logs.Debugf(utils.GetMD5Hash("m0-600-20090405-01.mp3"))
 	//	connection := db.DefaultDB{ConnectionGetterFunc: nil}
 	//	connection.Exec("")
-	type Menu struct {
-		MenuId          string      `json:"menuId"`
-		MenuName        string      `json:"menuName"`
-		MenuDescription zero.String `json:"menuDescription"`
-	}
+	//	type Menu struct {
+	//		MenuId          string      `json:"menuId"`
+	//		MenuName        string      `json:"menuName"`
+	//		MenuDescription zero.String `json:"menuDescription"`
+	//	}
 	//	menu := Menu{}
-	//	web.Populate(&menu)
+	//	logs.Debug("type: ", reflect.TypeOf(menu))
+	//	logs.Debug("value: ", reflect.ValueOf(menu))
+	//	v := reflect.ValueOf(&menu)
+	//	logs.Debug("type:", v.Type())
+	//	logs.Debug("Kind:", v.Kind())
+	//	logs.Debug("Setable:", v.CanSet())
+	//
+	//	ve := v.Elem()
+	//	logs.Debug("ve setable:", ve.CanSet())
+	//	vet := ve.Type()
+	//	for i := 0; i < ve.NumField(); i++ {
+	//		f := ve.Field(i)
+	//		switch f.Type() {
+	//		case "int":
+	//			f.SetInt(60)
+	//		case "string":
+	//			f.SetString("test")
+	//		}
+	//		logs.Debugf("%d: %s %s = %v\n", i, vet.Field(i).Name, f.Type(), f.Interface())
+	//	}
+
+	//	var x int64 = 64
+	//	xv := reflect.ValueOf(&x)
+	//	logs.Debug("xv type:", xv.Type())
+	//	logs.Debug("xv setable:", xv.CanSet())
+	//
+	//	xve := xv.Elem()
+	//	logs.Debug("xve setable:", xve.CanSet())
+	//
+	//	xve.SetInt(100)
+	//	logs.Debug("x:", x)
+
+	//		web.Populate(&menu)
 	//	logs.Debugf("%s", menu)
 }
