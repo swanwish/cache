@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"math/rand"
 	"time"
 )
@@ -22,7 +24,6 @@ var (
 )
 
 func GeneratePassword(source string, date, length int64) Password {
-	//	character := [][]string{{"A", "B"}, {"a", "b"}, {"1", "2"}, {"!", "@"}}
 	pwd := ""
 	typeLength := len(character)
 	if date == 0 {
@@ -50,4 +51,11 @@ func getSourceOffset(source string) int64 {
 		offset += int64(source[i])
 	}
 	return offset
+}
+
+func EncryptPassword(password, salt string) string {
+	hash := sha256.New()
+	hash.Write([]byte(password))
+	md := hash.Sum([]byte(salt))
+	return hex.EncodeToString(md)
 }
