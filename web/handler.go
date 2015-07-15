@@ -16,8 +16,9 @@ func MakeLogEnabledHandler(fn func(http.ResponseWriter, *http.Request)) http.Han
 }
 
 func logRequest(r *http.Request) {
-	// get client ip address
-	ip, _, _ := net.SplitHostPort(r.RemoteAddr)
-
+	ip := r.Header.Get("X-Real-IP")
+	if ip == "" {
+		ip, _, _ = net.SplitHostPort(r.RemoteAddr)
+	}
 	logs.Debugf("%s %v from ip: %s", r.Method, r.URL, ip)
 }

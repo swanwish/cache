@@ -2,7 +2,8 @@ package main
 
 import (
 	_ "github.com/swanwish/go-helper/db"
-	_ "github.com/swanwish/go-helper/utils"
+	"github.com/swanwish/go-helper/logs"
+	"github.com/swanwish/go-helper/utils"
 	_ "github.com/swanwish/go-helper/web"
 )
 
@@ -71,4 +72,12 @@ func main() {
 
 	//		web.Populate(&menu)
 	//	logs.Debugf("%s", menu)
+	pwd := utils.GeneratePassword("liwp", 0, 8)
+	logs.Debugf("The password is %v", pwd)
+	//	seed := "liwp@Stephen我"
+	//	var offset int64
+	//	for i := 0; i < len(seed); i++ {
+	//		offset += int64(seed[i])
+	//	}
+	//	logs.Debugf("The offset is %d", offset)
 }
