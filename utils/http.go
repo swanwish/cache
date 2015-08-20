@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"io/ioutil"
 	"net/http"
+	"net/url"
+	"strconv"
 
 	"github.com/swanwish/go-helper/logs"
 )
@@ -29,6 +31,33 @@ func PostUrlContent(url string, content []byte) ([]byte, error) {
 	req.Header.Set("Content-Type", "application/json")
 
 	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		logs.Errorf("Failed to post content, the error is %v", err)
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	body, _ := ioutil.ReadAll(resp.Body)
+	logs.Debugf("The content is %s", string(body))
+	return body, nil
+}
+
+func PostForm(url string, data url.Values, headers http.Header) ([]byte, error) {
+	client := &http.Client{}
+	req, err := http.NewRequest("POST", url, bytes.NewBufferString(data.Encode()))
+	if err != nil {
+		logs.Errorf("Failed to get request, the error is %v", err)
+		return nil, err
+	}
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Add("Content-Length", strconv.Itoa(len(data.Encode())))
+	if headers != nil {
+		for key, value := range headers {
+			req.Header[key] = value
+		}
+	}
+
 	resp, err := client.Do(req)
 	if err != nil {
 		logs.Errorf("Failed to post content, the error is %v", err)
